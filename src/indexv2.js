@@ -1,3 +1,7 @@
+//DATE NOW
+
+const DATE_NOW = new Date(2022, 10, 10);
+console.log(getRestDays(Banner1, DATE_NOW));
 // Shema - BEGIN
 const Banner1 = {
 	id: 1,
@@ -27,7 +31,7 @@ const Banner3 = {
 const Banner4 = {
 	id: 4,
 	impressions: 10000,
-	alreadyShown: 3104,
+	alreadyShown: 0,
 	dateStart: new Date(2022, 10, 13),
 	dateStop: new Date(2022, 10, 18),
 	img: 'https://th.bing.com/th/id/OIP.6HMDbozq05PXmWtkdr0hegAAAA?w=211&h=180&c=7&r=0&o=5&pid=1.7',
@@ -141,8 +145,13 @@ function init(place, date) {
 		for (let i = 0; i < bannersLogArray.length; i++) {
 			bannersLog += `<div>${bannersLogArray[i].id} - ${bannersLogArray[i].showPerDay}</div>`;
 		}
-
 		log.innerHTML = `State: ` + bannersLog;
+		const title = document.getElementById('title');
+		title.innerHTML = `	<h1 class="font-mono text-3xl font-bold w text-center">
+		Banner's rotation!</h1>`;
+		// setTimeout(function () {
+		// 	location.reload();
+		// }, 200);
 	} else {
 		localStorage.removeItem('array');
 	}
@@ -280,11 +289,32 @@ function timeLineBalancer(banners, date) {
 			restOfTheShows + (tempArray[i].impressions - tempArray[i].alreadyShown);
 	}
 	console.log(restOfTheShows);
-	// return middle shows for all banners
-	return restOfTheShows / restOfTheDays;
+	// return middle shows for all banners, rest of the days rest of the show,
+	return [restOfTheShows / restOfTheDays, restOfTheShows];
 }
 
-console.log;
+console.log(timeLineBalancer(tempArray1, new Date(2022, 10, 10)));
+
+let tempArray2 = [Banner1, Banner2, Banner3, Banner4];
+
+function getRestDays(impressions, dateNow, dateStart, dateStop) {
+	let alreadyShown = 0;
+	let restDays = 0;
+	let allDays = 0;
+	let middleShows = 0;
+	let result = [];
+	for (let i = 0; i < array.length; i++) {
+		restDays = getAmountDays(dateStart, dateNow);
+		allDays = getAmountDays(dateStart, dateStop);
+		middleShows = impressions / allDays;
+		alreadyShown = impressions - middleShows * restDays;
+		result.push([alreadyShown, restDays]);
+	}
+	return result;
+}
+
+// getRestDays(tempArray2, new Date(2022, 10, 10));
+
 
 // getAmountDays(new Date(2022, 10, 10), new Date(2022, 10, 30)));
 // timeLineBalancer(tempArray, new Date(2022, 10, 20));
