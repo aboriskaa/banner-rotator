@@ -141,6 +141,10 @@ function init(place, date) {
 			bannersLog += `<div>${bannersLogArray[i].id} - ${bannersLogArray[i].showPerDay}</div>`;
 		}
 		log.innerHTML = `State: ` + bannersLog;
+		const title = document.getElementById('title');
+		title.innerHTML = `	<h1 class="font-mono text-3xl font-bold w text-center">
+		Banner's rotation!</h1>`;
+
 		setTimeout(function () {
 			location.reload();
 		}, 200);
