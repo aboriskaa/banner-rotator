@@ -1,4 +1,11 @@
-// SHEMA - BEGIN
+// SCHEMA - BEGIN
+
+const DATE_NOW1 = new Date(2022, 10, 5);
+
+const DATE_NOW2 = new Date(2022, 10, 17);
+
+const DATE_NOW3 = new Date(2022, 10, 27);
+
 const Banner1 = {
 	id: 1,
 	impressions: 10000,
@@ -10,7 +17,7 @@ const Banner2 = {
 	id: 2,
 	impressions: 8000,
 	dateStart: new Date(2022, 10, 9),
-	dateStop: new Date(2022, 10, 20),
+	dateStop: new Date(2022, 10, 24),
 	img: 'https://th.bing.com/th/id/OIP.Fc_ZlOK4ANifZJl08hNVZQAAAA?w=198&h=180&c=7&r=0&o=5&pid=1.7',
 };
 const Banner3 = {
@@ -45,19 +52,19 @@ const advPlace = {
 	maxShowPowerPerDay: 20000,
 	Advertisers: [Advertiser1, Advertiser2, Advertiser3],
 };
-// SHEMA - END
+// SCHEMA - END
 
-function bd(action, array) {
-	let newArray = [];
+// function bd(action, array) {
+// 	let newArray = [];
 
-	switch (action) {
-		case 'set':
-			newArray = localStorage.setItem('array', JSON.stringify(array));
-		case 'parse':
-			newArray = JSON.parse(localStorage.getItem('array'));
-	}
-	return newArray;
-}
+// 	switch (action) {
+// 		case 'set':
+// 			newArray = localStorage.setItem('array', JSON.stringify(array));
+// 		case 'parse':
+// 			newArray = JSON.parse(localStorage.getItem('array'));
+// 	}
+// 	return newArray;
+// }
 
 function getAmountDays(begin, end) {
 	let timeDifference = new Date(end) - new Date(begin);
@@ -87,8 +94,8 @@ function isShow(place, date) {
 						place.Advertisers[i].banners[ii].impressions /
 							getAmountDays(
 								place.Advertisers[i].banners[ii].dateStart,
-								place.Advertisers[i].banners[ii].dateStop,
-							),
+								place.Advertisers[i].banners[ii].dateStop
+							)
 					),
 					img: place.Advertisers[i].banners[ii].img,
 					shows: 0,
@@ -102,16 +109,18 @@ function isShow(place, date) {
 }
 
 function init(place, date) {
-	let array = [];
 	if (localStorage.length === 0) {
 		localStorage.setItem(
 			'array',
-			JSON.stringify(setDayRatio(isShow(place, date))),
+			JSON.stringify(setDayRatio(isShow(place, date)))
 		);
-		array = JSON.parse(localStorage.getItem('array'));
-	} else {
-		array = JSON.parse(localStorage.getItem('array'));
 	}
+	rotator();
+}
+
+function rotator() {
+	let array = [];
+	array = JSON.parse(localStorage.getItem('array'));
 
 	if (array.length > 0) {
 		let tempBannerRandomArray = [];
@@ -129,7 +138,7 @@ function init(place, date) {
 				localStorage.setItem('array', JSON.stringify(newArray));
 			}
 		}
-		const container = document.getElementById('conteiner');
+		const container = document.getElementById('container');
 		container.innerHTML = `<div class="border border-slate-500 shadow-lg rounded-lg p-1">
 		<img src="${bannerNow.img}" alt='${bannerNow.id}' class="rounded-lg">
 		</div>`;
@@ -147,7 +156,7 @@ function init(place, date) {
 
 		setTimeout(function () {
 			location.reload();
-		}, 200);
+		}, 500);
 	} else {
 		localStorage.removeItem('array');
 	}
@@ -187,18 +196,6 @@ function getRatioArray(array) {
 	return -1;
 }
 
-// function getMomentRatio(array) {
-// 	let tempArray = [];
-// 	if (array) {
-// 		for (let i = 0; i < array.length; i++) {
-// 			let temp = array[i].shows / array[i].ratio;
-// 			tempArray[i] = temp * 100;
-// 		}
-// 		return tempArray;
-// 	}
-// 	return -1;
-// }
-
 function getBannerValueIndex(ratioArray) {
 	const max = ratioArray.reduce((accumulator, current) => {
 		return accumulator + current;
@@ -223,7 +220,7 @@ function getBannerValueIndex(ratioArray) {
 	return [-1, -1];
 }
 
-init(advPlace, new Date(2022, 10, 20));
+init(advPlace, DATE_NOW1);
 
 // const test_1 = [40, 50, 50, 100];
 // const test_2 = [10, 10, 10, 10, 10, 50];
